@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Fishtank</title>
+    <script src="./src/game-of-life.js" type="module" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/master.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+    <style media="screen">
+      body { max-width:100%; max-height:100%; }
+    </style>
+  </head>
+  <body>
+    <game-of-life
+      columns="63"
+      rows="32"
+      on-color="var(--color-hl)"
+      off-color="var(--color-ll)"
+      bg-color="var(--color-bg)"
+      init="(Math.abs(x - 30) === 1 || Math.abs(y - 15) === 1)"
+      >
+      <noscript>Unfortunately, the Game of Life, much like real life, requires JavaScript for full functionality.</noscript>
+    </game-of-life>
+  </body>
+</html>

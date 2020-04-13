@@ -1,0 +1,12 @@
+:root{
+  --color-mn:#333;
+  --color-bg:#ddd;
+  --color-ll:#aab;
+  --color-hl:#58a;
+}
+*{
+  color: var(--color-mn);
+  background-color: var(--color-bg);
+  border-radius:0.3rem;
+  border-color:var(--color-ll);
+}
