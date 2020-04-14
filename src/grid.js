@@ -1,20 +1,5 @@
 import { wrap } from './utils.js'
-
-export const VON_NEUMANN = [
-  { x: -1, y: 0 },
-  { x: 1, y: 0 },
-  { x: 0, y: -1 },
-  { x: 0, y: 1 },
-]
-
-export const EXPANDED_VON_NEUMANN = VON_NEUMANN.map(p => ({
-  x: p.x * 2,
-  y: p.y * 2,
-})).concat(VON_NEUMANN)
-
-export const MOORE = []
-for (let y = -1; y <= 1; y++)
-  for (let x = -1; x <= 1; x++) if (x || y) MOORE.push({ x, y })
+import { MOORE } from './neighbourhood.js'
 
 export class Grid2D {
   constructor(width, height = width, init = () => 0, wrap = false) {
@@ -96,9 +81,12 @@ export class Grid2D {
     return this.data.map(row => row.join(colSep)).join(rowSep)
   }
   static fromString(str, colSep = ',', rowSep = '\n') {
-    const grid = str.split(rowSep).map(row => row.split(colSep).map(Number))
+    const grid = str
+      .trim()
+      .split(rowSep)
+      .map(row => row.split(colSep).map(Number))
     if (grid.every(g => g.length === grid[0].length)) {
-      return new Grid2D(grid.length, grid[0].length, ({x, y}) => grid[y][x])
+      return new Grid2D(grid.length, grid[0].length, ({ x, y }) => grid[y][x])
     } else {
       throw Error('Rows must be equal in length.')
     }
