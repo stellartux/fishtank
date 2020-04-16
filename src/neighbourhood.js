@@ -1,15 +1,14 @@
-export const VON_NEUMANN = [
-  { x: -1, y: 0 },
-  { x: 1, y: 0 },
-  { x: 0, y: -1 },
-  { x: 0, y: 1 },
-]
+import { range } from './utils.js'
+import { Position } from './position.js'
 
-export const EXPANDED_VON_NEUMANN = VON_NEUMANN.map(p => ({
-  x: p.x * 2,
-  y: p.y * 2,
-})).concat(VON_NEUMANN)
+export const FULL = Array.from(Position.range({ x: -1, y: -1 }, { x: 1, y: 1 }))
 
-export const MOORE = []
-for (let y = -1; y <= 1; y++)
-  for (let x = -1; x <= 1; x++) if (x || y) MOORE.push({ x, y })
+export function Neighbourhood(descriptor) {
+  if (!/^[0-8]+$/.test(descriptor)) {
+    throw Error(`Neighbourhood(): Could not parse ${descriptor}`)
+  }
+  return descriptor.split('').map(c => FULL[c])
+}
+
+export const MOORE = new Neighbourhood('01235678')
+export const VON_NEUMANN = new Neighbourhood('1357')
