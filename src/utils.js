@@ -6,7 +6,7 @@ export const $ = (selector, parent = document) =>
   clamp = (val, min, max) => Math.max(min, Math.min(max, val)),
   wrap = (val, min, max) => (val % (max - min)) + min,
   range = function*(min, max, step = 1) {
-    for (let i = min; i < max; i += step) yield i
+    for (let i = min; i <= max; i += step) yield i
   }
 let debounceRef
 export function debounce(fn, time = 100) {

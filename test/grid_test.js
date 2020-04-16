@@ -27,7 +27,7 @@ Deno.test({
   fn: function() {
     const h = g.copy()
     h.set({ x: 1, y: 0 }, 5)
-    assertEquals(g.toString(), '1,0,0,0\n0,2,0,0\n0,0,3,0\n0,0,0,4')
+    assertEquals(g.toString(), diagonal)
     assertEquals(h.toString(), '1,5,0,0\n0,2,0,0\n0,0,3,0\n0,0,0,4')
   },
 })
