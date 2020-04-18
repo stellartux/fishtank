@@ -1,30 +1,42 @@
 import { wrap } from './utils.js'
 import { MOORE } from './neighbourhood.js'
+import { Position } from './position.js'
 
 export class Grid2D {
-  constructor(width, height = width, init = () => 0, wrap = false) {
-    this.width = width
-    this.height = height
-    this.init = init
-    this.data = Array.from({ length: this.height }, (_, y) =>
-      Array.from({ length: this.width }, (_, x) => this.init({ x, y }, this))
-    )
-    this.wrap = wrap
-    if (wrap) console.log(wrap)
+  constructor(options) {
+    if (
+      !['width', 'height'].every(
+        v => options[v] > 0 && Number.isInteger(options[v])
+      )
+    ) {
+      throw Error('Grid2D: Needs width and height for constructor')
+    }
+    this.width = options.width
+    this.height = options.height
+    if ('data' in options) {
+      this.data = JSON.parse(JSON.stringify(options.data))
+    } else {
+      this.fill(options.init || 0)
+    }
+    this.wrap = options.wrap || false
   }
+
   get size() {
     return this.width * this.height
   }
-  fill(value) {
+  fill(value = 0) {
     this.data = Array.from({ length: this.height }, () =>
-      Array.from({ length: this.width }, () => value)
+      Array.from(
+        { length: this.width },
+        typeof value === 'function' ? value : () => value
+      )
     )
   }
   clear() {
     this.fill(0)
   }
   delete(position) {
-    this.set(position, this.init(position))
+    this.set(position, 0)
   }
   get(position) {
     return this.data[position.y][position.x]
@@ -77,16 +89,35 @@ export class Grid2D {
       yield this.get(n)
     }
   }
-  toString(colSep = ',', rowSep = '\n') {
+  toString(colSep = ',', rowSep = '\n', stringMap = '01') {
+    if (!this.data) console.trace(this)
     return this.data.map(row => row.join(colSep)).join(rowSep)
   }
-  static fromString(str, colSep = ',', rowSep = '\n') {
-    const grid = str
-      .trim()
-      .split(rowSep)
-      .map(row => row.split(colSep).map(Number))
-    if (grid.every(g => g.length === grid[0].length)) {
-      return new Grid2D(grid.length, grid[0].length, ({ x, y }) => grid[y][x])
+  static fromString(
+    str,
+    stringMap = '0123456789',
+    colSep = ',',
+    rowSep = '\n'
+  ) {
+    const grid = {
+      data: str
+        .trim()
+        .split(rowSep)
+        .map(row =>
+          row
+            .trim()
+            .split(colSep)
+            .map(char => stringMap.indexOf(char))
+        ),
+    }
+
+    if (
+      grid.data.length &&
+      grid.data.every(g => g.length === grid.data[0].length)
+    ) {
+      grid.width = grid.data[0].length
+      grid.height = grid.data.length
+      return new Grid2D(grid)
     } else {
       throw Error('Rows must be equal in length.')
     }
@@ -95,15 +126,17 @@ export class Grid2D {
     return 'Grid2D'
   }
   copy() {
-    return new Grid2D(this.width, this.height, this.get.bind(this))
+    return new Grid2D(this)
   }
   map(fn) {
-    return new Grid2D(this.width, this.height, pos =>
-      fn(this.get(pos), pos, this)
+    const grid = this.copy()
+    grid.forEach((value, position) =>
+      grid.set(position, fn(value, position, grid))
     )
+    return grid
   }
   forEach(fn) {
-    for (const p of this) fn(p[1], p[0], this)
+    for (const [value, position] of this) fn(position, value, this)
   }
   reduce(fn, init) {
     return Array.from(this.values()).reduce(fn, init)

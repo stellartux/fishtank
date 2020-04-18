@@ -2,7 +2,7 @@ import { assertEquals } from '../devdeps.ts'
 import { Grid2D } from '../src/grid.js'
 import { sum, prod } from '../src/utils.js'
 
-const g = new Grid2D(4, 4)
+const g = new Grid2D({ width: 4, height: 4 })
 const empty = '0,0,0,0\n0,0,0,0\n0,0,0,0\n0,0,0,0'
 const diagonal = '1,0,0,0\n0,2,0,0\n0,0,3,0\n0,0,0,4'
 
@@ -41,7 +41,10 @@ Deno.test({
 Deno.test({
   name: 'Grid2D.map()',
   fn: function() {
-    assertEquals(g.map(x => 2 * x).toString(), '4,0,0,0\n0,8,0,0\n0,0,12,0\n0,0,0,16')
+    assertEquals(
+      g.map(x => 2 * x).toString(),
+      '4,0,0,0\n0,8,0,0\n0,0,12,0\n0,0,0,16'
+    )
   },
 })
 Deno.test({
@@ -55,22 +58,32 @@ Deno.test({
   name: 'Grid2D.neighbourValues()',
   fn: function() {
     assertEquals(
-      Array.from((new Grid2D(3, 3, () => 1)).neighbourValues({ x: 1, y: 1 })),
+      Array.from(
+        new Grid2D({ width: 3, height: 3, init: () => 1 }).neighbourValues({
+          x: 1,
+          y: 1,
+        })
+      ),
       Array.from({ length: 8 }, () => 1)
     )
     let i = 0
     assertEquals(
-      Array.from(new Grid2D(3, 3, () => i++).neighbourValues({ x: 1, y: 1 })),
+      Array.from(
+        new Grid2D({ width: 3, height: 3, init: () => i++ }).neighbourValues({
+          x: 1,
+          y: 1,
+        })
+      ),
       [0, 1, 2, 3, 5, 6, 7, 8]
     )
   },
 })
 Deno.test({
-  name: "Grid2D.fromString()",
+  name: 'Grid2D.fromString()',
   fn: function() {
     assertEquals(Grid2D.fromString(empty).toString(), empty)
     assertEquals(Grid2D.fromString(diagonal).toString(), diagonal)
-  }
+  },
 })
 
 if (import.meta.main) Deno.runTests()

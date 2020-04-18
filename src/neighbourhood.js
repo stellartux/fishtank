@@ -12,3 +12,4 @@ export function Neighbourhood(descriptor) {
 
 export const MOORE = new Neighbourhood('01235678')
 export const VON_NEUMANN = new Neighbourhood('1357')
+export const HEXAGONAL = new Neighbourhood('013578')

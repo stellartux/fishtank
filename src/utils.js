@@ -7,7 +7,8 @@ export const $ = (selector, parent = document) =>
   wrap = (val, min, max) => (val % (max - min)) + min,
   range = function*(min, max, step = 1) {
     for (let i = min; i <= max; i += step) yield i
-  }
+  },
+  unique = (val, ind, arr) => ind === arr.indexOf(val)
 let debounceRef
 export function debounce(fn, time = 100) {
   if (debounceRef) clearTimeout(debounceRef)

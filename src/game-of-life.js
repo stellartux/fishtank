@@ -1,6 +1,6 @@
 import { Automaton } from './automaton.js'
 import { $, $$, debounce } from './utils.js'
-import { gameOfLifeRules } from './rules.js'
+import { games, totalRuleRegex, Ruleset } from './rules.js'
 
 customElements.define(
   'game-of-life',
@@ -12,12 +12,19 @@ customElements.define(
         : () => 0
       this.wrap = Boolean(this.getAttribute('wrap'))
       this.paused = true
-      this.rows = this.getAttribute('rows') || this.getAttribute('columns') || 8
-      this.columns = this.getAttribute('columns') || this.rows
-      this.rules = gameOfLifeRules
+      this.rows = Number(
+        this.getAttribute('rows') || this.getAttribute('columns') || 8
+      )
+      this.columns = Number(this.getAttribute('columns') || this.rows)
+      const rulestring = this.getAttribute('rules')
+      this.rules = Ruleset(
+        totalRuleRegex.test(rulestring) ? rulestring : 'B3/S23'
+      )
       this.shadow = this.attachShadow({ mode: 'open' })
       this.shadow.innerHTML = `
 <nav>
+<input name="rules" list="games" placeholder="B3/S23"/>
+<datalist id="games"></datalist>
 <button name="next">Next</button>
 <button name="pause">Unpause</button>
 <button name="play">Play</button>
@@ -84,10 +91,33 @@ input[name="speed"]::before{content:'🐢';}
 input[name="speed"]::after{content:'🐇';}
 input[name="rows"]::before{content:'rows';}
 input[name="columns"]::before{content:'cols';}
+input[name="rules"]:valid{border:medium solid #119933;}
+input[name="rules"]:invalid{border-color:#dd1111;}
 </style>`
+
+      const gameList = $('#games', this.shadow)
+      for (const [key, value] of Object.entries(games)) {
+        const option = document.createElement('option')
+        option.innerText = key
+        option.setAttribute('value', value)
+        gameList.append(option)
+      }
+
+      const rules = $('input[name="rules"]', this.shadow)
+      rules.addEventListener('input', ev => {
+        if (totalRuleRegex.test(rules.value)) {
+          rules.setCustomValidity('')
+          this.rules = Ruleset(rules.value)
+          this.updateAutomaton()
+        } else {
+          rules.setCustomValidity('Invalid')
+        }
+      })
+
       $$('nav button', this.shadow).forEach(el => {
         el.onclick = this[el.name].bind(this)
       })
+
       $$('nav input[min="3"]', this.shadow).forEach(el => {
         el.oninput = () => {
           this.setAttribute(el.name, el.valueAsNumber)
@@ -103,14 +133,16 @@ input[name="columns"]::before{content:'cols';}
       this.style.setProperty('--speed', `${speed}ms`)
       return speed
     }
-    updateAutomaton(f = this.init) {
-      this.automaton = new Automaton(
-        this.rules,
-        this.columns,
-        this.rows,
-        f,
-        this.wrap
-      )
+
+    updateAutomaton(fn) {
+      const options = {
+        width: this.columns,
+        height: this.rows,
+        wrap: this.wrap,
+        init: fn,
+      }
+      if (!fn && this.automaton) options.data = this.automaton.data
+      this.automaton = new Automaton(this.rules, options)
       const main = $('main', this.shadow)
       main.innerHTML = ''
       for (const pos of this.automaton.keys()) {
@@ -129,14 +161,29 @@ input[name="columns"]::before{content:'cols';}
     }
 
     static get observedAttributes() {
-      return ['rows', 'columns', 'on-color', 'off-color', 'bg-color']
+      return [
+        'rows',
+        'columns',
+        'on-color',
+        'off-color',
+        'bg-color',
+        'wrap',
+        'rules',
+      ]
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'rows' || name === 'columns') {
+      if (
+        name === 'rows' ||
+        name === 'columns' ||
+        name === 'wrap' ||
+        name === 'rules'
+      ) {
         debounce(this.updateAutomaton.bind(this))
       }
-      this.style.setProperty(`--${name}`, newValue)
+      if (name !== 'wrap' && name !== 'rules') {
+        this.style.setProperty(`--${name}`, newValue)
+      }
     }
 
     draw() {

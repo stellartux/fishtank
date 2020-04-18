@@ -2,48 +2,48 @@ import { assertEquals } from '../devdeps.ts'
 import { Automaton } from '../src/automaton.js'
 import { gameOfLifeRules } from '../src/rules.js'
 
-const gol = new Automaton(gameOfLifeRules, 5, 5)
+const gol = new Automaton(gameOfLifeRules, { width: 5, height: 5 })
 
 Deno.test({
-  name: 'Initial State',
+  name: 'new Automaton()',
   fn: function() {
     assertEquals(
-      gol.toString(),
       `0,0,0,0,0
 0,0,0,0,0
 0,0,0,0,0
 0,0,0,0,0
-0,0,0,0,0`
+0,0,0,0,0`,
+      gol.toString()
     )
   },
 })
 Deno.test({
-  name: 'Set state',
+  name: 'automaton.set()',
   fn: function() {
     gol.set({ x: 1, y: 1 }, 1)
     gol.set({ x: 2, y: 1 }, 1)
     gol.set({ x: 3, y: 1 }, 1)
     assertEquals(
-      gol.toString(),
       `0,0,0,0,0
 0,1,1,1,0
 0,0,0,0,0
 0,0,0,0,0
-0,0,0,0,0`
+0,0,0,0,0`,
+      gol.toString()
     )
   },
 })
 Deno.test({
-  name: 'Tick',
+  name: 'automaton.tick()',
   fn: function() {
     gol.tick()
     assertEquals(
-      gol.toString(),
       `0,0,1,0,0
 0,0,1,0,0
 0,0,1,0,0
 0,0,0,0,0
-0,0,0,0,0`
+0,0,0,0,0`,
+      gol.toString()
     )
   },
 })
