@@ -39,7 +39,11 @@ export class Grid2D {
     this.set(position, 0)
   }
   get(position) {
-    return this.data[position.y][position.x]
+    if (Position.isPosition(position)) {
+      return this.data[position.y][position.x]
+    } else {
+      throw Error('Invalid position')
+    }
   }
   has(position) {
     return (
@@ -50,7 +54,11 @@ export class Grid2D {
     )
   }
   set(position, value) {
-    this.data[position.y][position.x] = value
+    if (Position.isPosition(position)) {
+      this.data[position.y][position.x] = value
+    } else {
+      throw Error('Invalid position')
+    }
   }
   *keys() {
     for (let y = 0; y < this.data.length; y++) {
