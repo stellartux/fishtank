@@ -79,6 +79,19 @@ Deno.test({
   },
 })
 Deno.test({
+  name: 'Grid2D.fromData()',
+  fn: function() {
+    assertEquals(
+      Grid2D.fromData([
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ]),
+      new Grid2D({ width: 3, height: 3 })
+    )
+  },
+})
+Deno.test({
   name: 'Grid2D.fromString()',
   fn: function() {
     assertEquals(Grid2D.fromString(empty).toString(), empty)

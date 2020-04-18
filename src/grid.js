@@ -107,8 +107,8 @@ export class Grid2D {
     colSep = ',',
     rowSep = '\n'
   ) {
-    const grid = {
-      data: str
+    return Grid2D.fromData(
+      str
         .trim()
         .split(rowSep)
         .map(row =>
@@ -116,25 +116,34 @@ export class Grid2D {
             .trim()
             .split(colSep)
             .map(char => stringMap.indexOf(char))
-        ),
-    }
+        )
+    )
+  }
 
-    if (
-      grid.data.length &&
-      grid.data.every(g => g.length === grid.data[0].length)
-    ) {
-      grid.width = grid.data[0].length
-      grid.height = grid.data.length
-      return new Grid2D(grid)
+  static fromData(data) {
+    if (data.length && data.every(g => g.length === data[0].length)) {
+      return new Grid2D({
+        data,
+        width: data[0].length,
+        height: data.length,
+      })
     } else {
       throw Error('Rows must be equal in length.')
     }
   }
+
   [Symbol.toStringTag]() {
     return 'Grid2D'
   }
   copy() {
     return new Grid2D(this)
+  }
+  copyFrom(other) {
+    if (other.width <= this.width && other.height <= this.height) {
+      this.forEach((_, position) => this.set(position, other.get(position)))
+    } else {
+      throw Error('Bad copy target')
+    }
   }
   map(fn) {
     const grid = this.copy()

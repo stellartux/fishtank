@@ -2,7 +2,11 @@ import { assertEquals } from '../devdeps.ts'
 import { Automaton } from '../src/automaton.js'
 import { gameOfLifeRules } from '../src/rules.js'
 
-const gol = new Automaton(gameOfLifeRules, { width: 5, height: 5 })
+const gol = new Automaton(gameOfLifeRules, {
+  width: 5,
+  height: 5,
+  historyLength: 5,
+})
 
 Deno.test({
   name: 'new Automaton()',
@@ -41,6 +45,20 @@ Deno.test({
       `0,0,1,0,0
 0,0,1,0,0
 0,0,1,0,0
+0,0,0,0,0
+0,0,0,0,0`,
+      gol.toString()
+    )
+  },
+})
+Deno.test({
+  name: 'automaton.undo()',
+  fn: function() {
+    gol.undo()
+    assertEquals(
+      `0,0,0,0,0
+0,1,1,1,0
+0,0,0,0,0
 0,0,0,0,0
 0,0,0,0,0`,
       gol.toString()
