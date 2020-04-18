@@ -11,6 +11,7 @@ customElements.define(
         ? Function('{x, y}', `return ${this.getAttribute('init')}`)
         : () => 0
       this.wrap = Boolean(this.getAttribute('wrap'))
+      this.historyLength = 50
       this.paused = true
       this.rows = Number(
         this.getAttribute('rows') || this.getAttribute('columns') || 8
@@ -26,6 +27,7 @@ customElements.define(
 <input name="rules" list="games" placeholder="B3/S23"/>
 <datalist id="games"></datalist>
 <button name="next">Next</button>
+<button name="undo">Undo</button>
 <button name="pause">Unpause</button>
 <button name="play">Play</button>
 <button name="stop">Stop</button>
@@ -140,6 +142,7 @@ input[name="rules"]:invalid{border-color:#dd1111;}
         height: this.rows,
         wrap: this.wrap,
         init: fn,
+        historyLength: this.historyLength
       }
       if (!fn && this.automaton) options.data = this.automaton.data
       this.automaton = new Automaton(this.rules, options)
@@ -224,6 +227,12 @@ input[name="rules"]:invalid{border-color:#dd1111;}
 
     clear() {
       this.automaton.clear()
+      this.draw()
+    }
+
+    undo() {
+      this.stop()
+      this.automaton.undo()
       this.draw()
     }
   }
