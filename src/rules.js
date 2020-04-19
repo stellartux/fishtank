@@ -33,6 +33,13 @@ export const games = {
   Seeds: 'B2/S',
   'Serviettes or Persian Rug': 'B234/S',
   LongLife: 'B345/S5',
+  Replicator: 'B1357/S1357',
+  'B25/S4': 'B25/S4',
+  'Life without Death': 'B3/S012345678',
+  '34Life': 'B34/S34',
+  '2x2': 'B36/S125',
+  Morley: 'B368/S245',
+  Anneal: 'B4678/S35678',
 }
 
 /**
