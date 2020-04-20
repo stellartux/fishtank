@@ -198,14 +198,14 @@ input[name="rules"]:invalid{border-color:#dd1111;}
 
     next() {
       this.stop()
-      this.automaton.tick()
+      this.automaton.next()
       this.draw()
     }
 
     play() {
       this.stop()
       this.paused = false
-      this.automaton.tick()
+      this.automaton.next()
       this.draw()
       $('button[name="pause"]', this.shadow).innerText = 'Pause'
       this.intervalID = window.setTimeout(this.play.bind(this), this.speed)

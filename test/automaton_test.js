@@ -38,9 +38,9 @@ Deno.test({
   },
 })
 Deno.test({
-  name: 'automaton.tick()',
+  name: 'automaton.next()',
   fn: function() {
-    gol.tick()
+    gol.next()
     assertEquals(
       `0,0,1,0,0
 0,0,1,0,0

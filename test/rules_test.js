@@ -18,8 +18,8 @@ Deno.test({
   name: 'Ruleset: Life',
   fn: function() {
     assertEquals(expected.toString(), actual.toString())
-    expected.tick()
-    actual.tick()
+    expected.next()
+    actual.next()
     assertEquals(expected.toString(), actual.toString())
   },
 })
@@ -33,7 +33,7 @@ Deno.test({
     for (const position of highlife.neighbours({ x: 2, y: 2 }, HEXAGONAL)) {
       highlife.set(position, 1)
     }
-    highlife.tick()
+    highlife.next()
     assertEquals(highlife.get({ x: 2, y: 2 }), 1)
   },
 })
