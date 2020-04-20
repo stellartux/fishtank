@@ -45,5 +45,19 @@ Deno.test({
     assertEquals(Utils.withinRange(1, 2, 3), false)
   },
 })
+Deno.test({
+  name: 'Utils.digits()',
+  fn: function() {
+    assertEquals(Array.from(Utils.digits(135)), ['1', '3', '5'])
+    assertEquals(Array.from(Utils.digits(39, 2)), [
+      '1',
+      '0',
+      '0',
+      '1',
+      '1',
+      '1',
+    ])
+  },
+})
 
 if (import.meta.main) Deno.runTests()

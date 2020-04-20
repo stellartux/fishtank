@@ -11,7 +11,8 @@ export const $ = (selector, parent = document) =>
   withinRange = (val, min, max, step = 0) =>
     val >= min && val <= max && (!step || Number.isInteger((val - min) / step)),
   unique = (val, ind, arr) => ind === arr.indexOf(val),
-  isByte = val => withinRange(val, 0, 255, 1)
+  isByte = val => withinRange(val, 0, 255, 1),
+  digits = function*(n, base = 10) { yield* n.toString(base) }
 let debounceRef
 export function debounce(fn, time = 100) {
   if (debounceRef) clearTimeout(debounceRef)
