@@ -4,7 +4,7 @@ export const $ = (selector, parent = document) =>
   sum = (a = 0, b = 0) => Number(a) + Number(b),
   prod = (a = 1, b = 1) => a * b,
   clamp = (val, min, max) => Math.max(min, Math.min(max, val)),
-  wrap = (val, min, max) => (val % (max - min)) + min,
+  wrap = (val, min, max) => ((val + max) % (max - min)) + min,
   range = function*(min, max, step = 1) {
     for (let i = min; i <= max; i += step) yield i
   },

@@ -59,5 +59,16 @@ Deno.test({
     ])
   },
 })
+Deno.test({
+  name: "Utils.wrap()",
+  fn: function() {
+    assertEquals(Utils.wrap(3, 0, 4), 3)
+    assertEquals(Utils.wrap(-1, 0, 4), 3)
+    assertEquals(Utils.wrap(7, 0, 4), 3)
+    assertEquals(Utils.wrap(10, 2, 4), 2)
+    assertEquals(Utils.wrap(11, 3, 6), 5)
+    assertEquals(Utils.wrap(2, 3, 6), 5)
+  }
+})
 
 if (import.meta.main) Deno.runTests()
