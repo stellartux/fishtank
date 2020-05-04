@@ -98,5 +98,25 @@ Deno.test({
     assertEquals(Grid2D.fromString(diagonal).toString(), diagonal)
   },
 })
+Deno.test({
+  name: "Grid2D.every()",
+  fn: function() {
+    const e = Grid2D.fromString(empty)
+    const d = Grid2D.fromString(diagonal)
+    assertEquals(e.every(v => v === 0), true)
+    assertEquals(e.every(v => v === 1), false)
+    assertEquals(d.every(v => v === 0), false)
+  }
+})
+Deno.test({
+  name: "Grid2D.some()",
+  fn: function() {
+    const e = Grid2D.fromString(empty)
+    const d = Grid2D.fromString(diagonal)
+    assertEquals(e.some(v => v === 0), true)
+    assertEquals(e.some(v => v === 1), false)
+    assertEquals(d.some(v => v === 0), true)
+  }
+})
 
 if (import.meta.main) Deno.runTests()

@@ -158,4 +158,20 @@ export class Grid2D {
   reduce(fn, init) {
     return Array.from(this.values()).reduce(fn, init)
   }
+  some(predicate) {
+    for (const value of this.values()) {
+      if (predicate(value)) {
+        return true
+      }
+    }
+    return false
+  }
+  every(predicate) {
+    for (const value of this.values()) {
+      if (!predicate(value)) {
+        return false
+      }
+    }
+    return true
+  }
 }
