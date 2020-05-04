@@ -37,9 +37,9 @@ export class Automaton extends Grid2D {
     }
   }
 
-  next() {
+  next(rules = this.rules) {
     const previous = this.copy()
-    previous.forEach((_, pos) => this.set(pos, this.rules(pos, previous)))
+    previous.forEach((_, pos) => this.set(pos, rules(pos, previous)))
     this.history.push(previous)
   }
 
