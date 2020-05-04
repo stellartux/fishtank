@@ -1,0 +1,33 @@
+* {
+  color: #dddddd;
+  background-color: #222222;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 0;
+}
+body {
+  display: flex;
+  margin: auto;
+  height: 98vh;
+  width: 98vw;
+}
+#controls {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  width: min-content;
+  align-items: flex-start;
+}
+#controls * {
+  font-family: 'Cascadia Code', 'Fira Code', 'Hack', 'Source Code Pro', monospace;
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  min-height: 2.5rem;
+  min-width: min-content;
+}
+canvas {
+  width: 90%;
+  height: 90%;
+  border-radius: 0;
+  cursor: pointer;
+}
