@@ -31,3 +31,6 @@ canvas {
   border-radius: 0;
   cursor: pointer;
 }
+label {
+  border: thin outset #dddddd;
+}

@@ -4,9 +4,8 @@ import { $, $$, wrap } from './utils.js'
 const canvas = $('canvas'),
   ctx = canvas.getContext('2d'),
   pixel = 16 * devicePixelRatio,
-  controls = $('#controls'),
-  loopTime = 250
-let width, height, automaton, colors
+  controls = $('#controls')
+let width, height, automaton, colors, loopTime = 333
 
 function wireWorldRules(position, grid) {
   let value = grid.get(position)
@@ -124,3 +123,7 @@ $$('input[type="color"]', controls).forEach(input => {
   input.addEventListener('change', colorCallback)
 })
 colorCallback()
+
+$('input[name="speed"]', controls).addEventListener('change', function() {
+  loopTime = 1000 / this.value
+})
