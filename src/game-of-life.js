@@ -24,7 +24,7 @@ customElements.define(
       this.shadow = this.attachShadow({ mode: 'open' })
       this.shadow.innerHTML = `
 <nav>
-<input name="rules" list="games" placeholder="B3/S23"/>
+<input name="rules" list="games" placeholder="B3/S23" spellcheck="false"/>
 <datalist id="games"></datalist>
 <button name="next">Next</button>
 <button name="undo">Undo</button>
