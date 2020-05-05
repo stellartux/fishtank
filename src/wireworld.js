@@ -89,7 +89,7 @@ const buttonCallbacks = {
   },
   loop: () => {
     automaton.next()
-    if (automaton.some(value => value === 1 || value === 2)) {
+    if (automaton.some(value => value >= 1 && value <= 2) && !document.hidden) {
       scheduledCallback = setTimeout(buttonCallbacks.loop, loopTime)
     }
   },
@@ -111,7 +111,7 @@ const buttonCallbacks = {
     buttonCallbacks.stop()
     automaton.fill(3)
     drawGrid()
-  }
+  },
 }
 $$('button', controls).forEach(button => {
   button.addEventListener('click', buttonCallbacks[button.name])
