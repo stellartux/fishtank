@@ -60,7 +60,7 @@ Deno.test({
   },
 })
 Deno.test({
-  name: "Utils.wrap()",
+  name: 'Utils.wrap()',
   fn: function() {
     assertEquals(Utils.wrap(3, 0, 4), 3)
     assertEquals(Utils.wrap(-1, 0, 4), 3)
@@ -68,7 +68,33 @@ Deno.test({
     assertEquals(Utils.wrap(10, 2, 4), 2)
     assertEquals(Utils.wrap(11, 3, 6), 5)
     assertEquals(Utils.wrap(2, 3, 6), 5)
-  }
+  },
+})
+Deno.test({
+  name: 'Utils.zip()',
+  fn: function() {
+    assertEquals(Utils.zip([1, 2, 3], [4, 5, 6]), [
+      [1, 4],
+      [2, 5],
+      [3, 6],
+    ])
+  },
+})
+Deno.test({
+  name: 'Utils.unzip()',
+  fn: function() {
+    assertEquals(
+      Utils.unzip([
+        [1, 4],
+        [2, 5],
+        [3, 6],
+      ]),
+      [
+        [1, 2, 3],
+        [4, 5, 6],
+      ]
+    )
+  },
 })
 
 if (import.meta.main) Deno.runTests()

@@ -12,7 +12,11 @@ export const $ = (selector, parent = document) =>
     val >= min && val <= max && (!step || Number.isInteger((val - min) / step)),
   unique = (val, ind, arr) => ind === arr.indexOf(val),
   isByte = val => withinRange(val, 0, 255, 1),
-  digits = function*(n, base = 10) { yield* n.toString(base) }
+  digits = function*(n, base = 10) {
+    yield* n.toString(base)
+  },
+  zip = (ks, vs) => ks.map((k, i) => [k, vs[i]]),
+  unzip = r => [r.map(p => p[0]), r.map(p => p[1])]
 let debounceRef
 export function debounce(fn, time = 100) {
   if (debounceRef) clearTimeout(debounceRef)
