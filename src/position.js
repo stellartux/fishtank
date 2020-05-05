@@ -32,4 +32,7 @@ export class Position {
       }
     }
   }
+  toString() {
+    return `{ x: ${this.x}, y: ${this.y} }`
+  }
 }
