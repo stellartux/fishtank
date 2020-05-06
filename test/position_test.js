@@ -2,7 +2,7 @@ import { assertEquals } from '../devdeps.ts'
 import { Position } from '../src/position.js'
 
 Deno.test({
-  name: "new Position()",
+  name: 'new Position()',
   fn: function() {
     let p = new Position(1, 2)
     assertEquals(p.x, 1)
@@ -16,7 +16,24 @@ Deno.test({
     p = new Position(new Position(7, 8))
     assertEquals(p.x, 7)
     assertEquals(p.y, 8)
-  }
+  },
+})
+Deno.test({
+  name: 'Position.range()',
+  fn: function() {
+    assertEquals(Array.from(Position.range({ x: 0, y: 0 }, { x: 1, y: 1 })), [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ])
+  },
+})
+Deno.test({
+  name: 'Position.toString()',
+  fn: function() {
+    assertEquals(new Position(1, 2).toString(), '{ x: 1, y: 2 }')
+  },
 })
 
 if (import.meta.main) Deno.runTests()
