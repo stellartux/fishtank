@@ -5,6 +5,8 @@ A cellular automata playground
 
 [Wireworld](https://stellartux.github.io/fishtank/wireworld.html) is a [Wireworld](https://en.wikipedia.org/wiki/Wireworld) implementation. More info at [World Wide WireWorld](http://www.heise.ws/wireworld.html)
 
+[Buttons](https://stellartux.github.io/fishtank/wireworld.html) brings Game of Life to the Novation Launchpad.
+
 ## Tests
 
 - `deno test` to run all tests
