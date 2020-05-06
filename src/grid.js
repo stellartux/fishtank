@@ -39,7 +39,7 @@ export class Grid2D {
     this.set(position, 0)
   }
   get(position) {
-    if (Position.isPosition(position)) {
+    if (this.has(position)) {
       return this.data[position.y][position.x]
     } else {
       throw Error('Invalid position')
@@ -47,6 +47,7 @@ export class Grid2D {
   }
   has(position) {
     return (
+      Position.isPosition(position) &&
       position.x >= 0 &&
       position.x < this.width &&
       position.y >= 0 &&
@@ -54,7 +55,7 @@ export class Grid2D {
     )
   }
   set(position, value) {
-    if (Position.isPosition(position)) {
+    if (this.has(position)) {
       this.data[position.y][position.x] = value
     } else {
       throw Error('Invalid position')
@@ -88,9 +89,7 @@ export class Grid2D {
         }
         return p
       })
-      .filter(
-        ({ x, y }) => x >= 0 && y >= 0 && x < this.width && y < this.height
-      )
+      .filter(this.has.bind(this))
   }
   *neighbourValues(position, neighbourhood = MOORE) {
     for (const n of this.neighbours(position, neighbourhood)) {
