@@ -29,10 +29,25 @@ async function setupMIDI() {
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
       ],
+      wrap: true,
     }
   )
-  for (const data of automaton.entries()) {
-    launchpad.lightPad(...data)
+
+  function refreshPads() {
+    for (const pad of automaton.entries()) {
+      launchpad.lightPad(...pad)
+    }
+  }
+
+  refreshPads()
+
+  function playLoop() {
+    const previous = automaton.toString()
+    automaton.next()
+    const current = automaton.toString()
+    if (previous !== current) {
+      scheduledCallback = setTimeout(playLoop, 250)
+    }
   }
 
   let scheduledCallback
@@ -46,17 +61,8 @@ async function setupMIDI() {
       automaton.next()
     },
     play: () => {
-      if (automaton.some(value => value === 1)) {
-        buttonCallbacks.loop()
-      }
-    },
-    loop: () => {
-      const previous = automaton.toString()
-      automaton.next()
-      const current = automaton.toString()
-      if (previous !== current) {
-        scheduledCallback = setTimeout(buttonCallbacks.loop, 250)
-      }
+      buttonCallbacks.stop()
+      playLoop()
     },
     stop: () => {
       if (scheduledCallback) {
@@ -66,33 +72,27 @@ async function setupMIDI() {
     },
     random: () => {
       automaton.next(() => Math.round(Math.random()))
-      refreshPads()
+      buttonCallbacks.play()
     },
   }
-  $$('#controls button').forEach(button => {
+
+  const controls = $('#controls')
+  $$('button', controls).forEach(button => {
     button.addEventListener('click', buttonCallbacks[button.name])
+  })
+  $('input[type="checkbox"][name="wrap"]').addEventListener('change', event => {
+    automaton.wrap = event.target.checked
   })
 
   launchpad.input.addEventListener('midimessage', ({ data }) => {
     if (data[2]) {
-      switch (data[1]) {
-        case 104:
-          buttonCallbacks.step()
-          break
-        case 105:
-          buttonCallbacks.play()
-          break
-        case 106:
-          buttonCallbacks.stop()
-          break
-        case 107:
-          buttonCallbacks.clear()
-          break
-        default:
-          const position = launchpad.positions.get(data[1])
-          const value = Number(!automaton.get(position))
-          automaton.set(position, value)
-          launchpad.lightPad(position, value)
+      if (data[1] >= 104) {
+        buttonCallbacks[controls.children[data[1] - 104].name]()
+      } else {
+        const position = launchpad.positions.get(data[1])
+        const value = Number(!automaton.get(position))
+        automaton.set(position, value)
+        launchpad.lightPad(position, value)
       }
     }
   })
