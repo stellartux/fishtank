@@ -3,7 +3,7 @@ import { Grid2D } from './grid.js'
 import { Position } from './position.js'
 
 export class AbstractLaunchpad {
-  constructor(access) {
+  constructor(access, inputCallback) {
     if (!AbstractLaunchpad.available(access)) {
       throw Error('Launchpad not found in MIDIAccess object.')
     }
