@@ -1,6 +1,6 @@
-import { assertEquals } from '../devdeps.ts'
+import { assert, assertEquals } from '../devdeps.ts'
 import { Grid2D } from '../src/grid.js'
-import { sum, prod } from '../src/utils.js'
+import { sum, prod, range } from '../src/utils.js'
 
 const g = new Grid2D({ width: 4, height: 4 })
 const empty = '0,0,0,0\n0,0,0,0\n0,0,0,0\n0,0,0,0'
@@ -99,24 +99,44 @@ Deno.test({
   },
 })
 Deno.test({
-  name: "Grid2D.every()",
+  name: 'Grid2D.every()',
   fn: function() {
     const e = Grid2D.fromString(empty)
     const d = Grid2D.fromString(diagonal)
-    assertEquals(e.every(v => v === 0), true)
-    assertEquals(e.every(v => v === 1), false)
-    assertEquals(d.every(v => v === 0), false)
-  }
+    assert(e.every(v => v === 0))
+    assert(!e.every(v => v === 1))
+    assert(!d.every(v => v === 0))
+  },
 })
 Deno.test({
-  name: "Grid2D.some()",
+  name: 'Grid2D.some()',
   fn: function() {
     const e = Grid2D.fromString(empty)
     const d = Grid2D.fromString(diagonal)
-    assertEquals(e.some(v => v === 0), true)
-    assertEquals(e.some(v => v === 1), false)
-    assertEquals(d.some(v => v === 0), true)
-  }
+    assert(e.some(v => v === 0))
+    assert(!e.some(v => v === 1))
+    assert(d.some(v => v === 0))
+  },
+})
+Deno.test({
+  name: 'Grid2D.wrap',
+  fn: function() {
+    const g = new Grid2D({
+      width: 3,
+      height: 3,
+      data: [
+        [0, 5, 4],
+        [7, 8, 6],
+        [2, 3, 1],
+      ],
+      wrap: true,
+    })
+    assert(g.wrap)
+    assertEquals(g.get({ x: 0, y: 0 }), g.get({ x: 3, y: 3 }))
+    assertEquals(g.get({ x: 1, y: 0 }), g.get({ x: 4, y: 3 }))
+    assertEquals(g.get({ x: 1, y: 1 }), g.get({ x: 4, y: 4 }))
+    assertEquals([...g.neighbourValues({ x: 0, y: 0 })], [...range(1, 8)])
+  },
 })
 
 if (import.meta.main) Deno.runTests()

@@ -1,4 +1,3 @@
-import { wrap } from './utils.js'
 import { MOORE } from './neighbourhood.js'
 import { Position } from './position.js'
 
@@ -39,6 +38,13 @@ export class Grid2D {
     this.set(position, 0)
   }
   get(position) {
+    if (this.wrap) {
+      position = Position.wrap(
+        position,
+        { x: 0, y: 0 },
+        { x: this.width, y: this.height }
+      )
+    }
     if (this.has(position)) {
       return this.data[position.y][position.x]
     } else {
@@ -46,6 +52,13 @@ export class Grid2D {
     }
   }
   has(position) {
+    if (this.wrap) {
+      position = Position.wrap(
+        position,
+        { x: 0, y: 0 },
+        { x: this.width, y: this.height }
+      )
+    }
     return (
       Position.isPosition(position) &&
       position.x >= 0 &&
