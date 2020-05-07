@@ -17,7 +17,7 @@ export class Grid2D {
     } else {
       this.fill(options.init || 0)
     }
-    this.wrap = options.wrap || false
+    this.wrap = !!options.wrap
   }
 
   get size() {
