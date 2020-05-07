@@ -64,6 +64,10 @@ async function setupMIDI() {
         scheduledCallback = undefined
       }
     },
+    random: () => {
+      automaton.next(() => Math.round(Math.random()))
+      refreshPads()
+    },
   }
   $$('#controls button').forEach(button => {
     button.addEventListener('click', buttonCallbacks[button.name])
