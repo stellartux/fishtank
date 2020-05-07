@@ -35,5 +35,14 @@ Deno.test({
     assertEquals(new Position(1, 2).toString(), '{ x: 1, y: 2 }')
   },
 })
+Deno.test({
+  name: 'Position.wrap()',
+  fn: function() {
+    assertEquals(
+      Position.wrap({ x: 4, y: 2 }, { x: 0, y: 0 }, { x: 3, y: 3 }),
+      new Position(1, 2)
+    )
+  },
+})
 
 if (import.meta.main) Deno.runTests()

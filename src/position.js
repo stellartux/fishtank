@@ -1,4 +1,4 @@
-import { range } from './utils.js'
+import { range, wrap } from './utils.js'
 
 export class Position {
   constructor(...args) {
@@ -15,12 +15,15 @@ export class Position {
       this.y = args[1]
     } else throw Error('Bad input')
   }
+
   static isPosition(p) {
     return Number.isFinite(p.x) && Number.isFinite(p.y)
   }
+
   static isPositionArray(p) {
     return Array.isArray(p) && Number.isFinite(p[0]) && Number.isFinite(p[1])
   }
+
   static *range(start, end) {
     if (!Position.isPosition(start)) throw Error('Start is not a position')
     if (!Position.isPosition(end)) throw Error('End is not a position')
@@ -32,6 +35,14 @@ export class Position {
       }
     }
   }
+
+  static wrap(position, topLeft, bottomRight) {
+    return new Position(
+      wrap(position.x, topLeft.x, bottomRight.x),
+      wrap(position.y, topLeft.y, bottomRight.y)
+    )
+  }
+  
   toString() {
     return `{ x: ${this.x}, y: ${this.y} }`
   }
