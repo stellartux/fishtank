@@ -1,0 +1,62 @@
+main {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#launchpad-grid {
+  position: relative;
+  box-sizing: border-box;
+  color: #f0f;
+  display: grid;
+  grid: repeat(8, 1fr) / repeat(8, 1fr);
+  width: 80vmin;
+  height: 80vmin;
+  background-color: #080808;
+  border-radius: 2vmin;
+  border-bottom: thin solid darkgrey;
+  border-right: thin solid grey;
+  justify-items: stretch;
+  align-items: stretch;
+  gap: 1vmin;
+  padding: 3vmin;
+  box-shadow: 0.5vmin 2vmin #101010, 0.6vmin 2.5vmin orangered,
+    2vmin 3.5vmin 5vmin #000000aa;
+}
+
+#launchpad-grid::after {
+  content: '';
+  width: 4vmin;
+  height: 4vmin;
+  background-color: black;
+  position: absolute;
+  top: 38vmin;
+  left: 38vmin;
+  transform: rotate(45deg);
+}
+
+.square-pad {
+  background-color: #777;
+  border-radius: 5%;
+  border: outset darkgrey;
+}
+button:focus {
+  outline-color: orange;
+}
+
+.lit {
+  background: radial-gradient(circle at center, yellow, #996);
+  box-shadow: 0 0 2vmin #aaaa88;
+  border-color: yellow;
+}
+
+#controls {
+  display: flex;
+  padding: 1rem;
+}
+#controls * {
+  margin: 0 0.5ch;
+  padding: 0.5ch 1ch;
+}

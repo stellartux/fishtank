@@ -13,7 +13,7 @@ async function setupMIDI() {
   const automaton = new Automaton(
     (position, grid) => {
       const value = gameOfLifeRules(position, grid)
-      launchpad.lightPad(position, value)
+      launchpad.lightPad(position, value ? 'yellow' : 'off')
       return value
     },
     {
@@ -33,9 +33,11 @@ async function setupMIDI() {
     }
   )
 
+  launchpad.onPush = automaton.set.bind(automaton)
+
   function refreshPads() {
     for (const pad of automaton.entries()) {
-      launchpad.lightPad(...pad)
+      launchpad.lightPad(pad[0], pad[1] ? 'yellow' : 'off')
     }
   }
 
@@ -92,7 +94,7 @@ async function setupMIDI() {
         const position = launchpad.positions.get(data[1])
         const value = Number(!automaton.get(position))
         automaton.set(position, value)
-        launchpad.lightPad(position, value)
+        launchpad.lightPad(position, value ? 'yellow' : 'off')
       }
     }
   })
