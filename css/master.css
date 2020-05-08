@@ -9,4 +9,14 @@
   background-color: var(--color-bg);
   border-radius:0.3rem;
   border-color:var(--color-ll);
+  font-family: sans-serif;
+}
+button {
+  font-family: Hack, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  *{
+    color: var(--color-bg);
+    background-color: var(--color-mn);
+  }
 }
