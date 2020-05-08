@@ -5,8 +5,13 @@ export const $ = (selector, parent = document) =>
   prod = (a = 1, b = 1) => a * b,
   clamp = (val, min, max) => Math.max(min, Math.min(max, val)),
   wrap = (val, min, max) => ((val + max) % (max - min)) + min,
-  range = function*(min, max, step = 1) {
-    for (let i = min; i <= max; i += step) yield i
+  range = function*(a, b, step = 1) {
+    step = Math.abs(step)
+    if (a < b) {
+      for (let i = a; i <= b; i += step) yield i
+    } else if (a > b) {
+      for (let i = a; i >= b; i -= step) yield i
+    }
   },
   withinRange = (val, min, max, step = 0) =>
     val >= min && val <= max && (!step || Number.isInteger((val - min) / step)),

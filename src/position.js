@@ -25,12 +25,11 @@ export class Position {
   }
 
   static *range(start, end) {
-    if (!Position.isPosition(start)) throw Error('Start is not a position')
-    if (!Position.isPosition(end)) throw Error('End is not a position')
-    if (start.x > end.x || start.y > end.y)
-      throw Error('Start at top-left, end at bottom-right')
-    for (const y of range(start.y, end.y)) {
-      for (const x of range(start.x, end.x)) {
+    if (!Position.isPosition(start)) throw Error(`${start} is not a position`)
+    if (!Position.isPosition(end)) throw Error(`${end} is not a position`)
+
+    for (const y of range(start.y, end.y, start.y < end.y ? 1 : -1)) {
+      for (const x of range(start.x, end.x, start.x < end.x ? 1 : -1)) {
         yield new Position(x, y)
       }
     }
@@ -42,7 +41,7 @@ export class Position {
       wrap(position.y, topLeft.y, bottomRight.y)
     )
   }
-  
+
   toString() {
     return `{ x: ${this.x}, y: ${this.y} }`
   }

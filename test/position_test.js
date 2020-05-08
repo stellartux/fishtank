@@ -27,6 +27,12 @@ Deno.test({
       { x: 0, y: 1 },
       { x: 1, y: 1 },
     ])
+    assertEquals(Array.from(Position.range({ x: 2, y: 1 }, { x: 1, y: 2 })), [
+      new Position({ x: 2, y: 1 }),
+      new Position({ x: 1, y: 1 }),
+      new Position({ x: 2, y: 2 }),
+      new Position({ x: 1, y: 2 }),
+    ])
   },
 })
 Deno.test({

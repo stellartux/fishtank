@@ -33,6 +33,7 @@ Deno.test({
   fn: function() {
     assertEquals(Array.from(Utils.range(-1, 1)), [-1, 0, 1])
     assertEquals(Array.from(Utils.range(1, 7, 2)), [1, 3, 5, 7])
+    assertEquals(Array.from(Utils.range(1, -1, -1)), [1, 0, -1])
   },
 })
 Deno.test({
