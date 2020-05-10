@@ -1,42 +1,9 @@
-import { range, zip, $ } from './utils.js'
+import { range, zip, $, $$ } from './utils.js'
 import { Grid2D } from './grid.js'
 import { Position } from './position.js'
 
 export class AbstractLaunchpad {
-  constructor(access, inputCallback) {
-    if (!AbstractLaunchpad.available(access)) {
-      throw Error('Launchpad not found in MIDIAccess object.')
-    }
-
-    this.input = Array.from(access.inputs).find(input =>
-      input[1].name.startsWith('Launchpad')
-    )[1]
-    if (typeof inputCallback === 'function') {
-      this.input.addEventListener('midimessage', inputCallback)
-    }
-
-    this.output = Array.from(access.outputs).find(output =>
-      output[1].name.startsWith('Launchpad')
-    )[1]
-
-    this.palette = this.hasRGB
-      ? {
-          off: 12,
-          blue: 44,
-          yellow: 63,
-          orange: 47,
-          green: 61,
-          red: 14,
-        }
-      : {
-          off: 0,
-          blue: 37,
-          yellow: 62,
-          orange: 61,
-          green: 22,
-          red: 5,
-        }
-
+  constructor(options = {}) {
     const midiNumbers = Grid2D.fromData(
       [...range(11, 81, 10)].map(start => [...range(start, start + 7)])
     )
@@ -78,18 +45,66 @@ export class AbstractLaunchpad {
       el.classList.add('square-pad')
       el.position = position
       el.addEventListener('click', () => {
-        const value = el.classList.contains('lit') ? 0 : 62
-        this.lightPad(position, value)
-        this.onPush(position, value)
+        const value = el.classList.contains('lit')
+        this.lightPad(position, value ? 'off' : 'yellow')
       })
       parent.append(el)
     }
 
+    this.palette = {
+      off: 12,
+      blue: 44,
+      yellow: 63,
+      orange: 47,
+      green: 61,
+      red: 14,
+    }
+
     this.clearPads()
+
+    if (options.access) {
+      this.connectMIDI(options.access)
+    }
+  }
+
+  connectMIDI(access) {
+    if (AbstractLaunchpad.available(access)) {
+      this.midiAccess = access
+
+      this.input = Array.from(access.inputs).find(input =>
+        input[1].name.startsWith('Launchpad')
+      )[1]
+
+      if (typeof inputCallback === 'function') {
+        this.input.addEventListener('midimessage', inputCallback)
+      }
+
+      this.output = Array.from(access.outputs).find(output =>
+        output[1].name.startsWith('Launchpad')
+      )[1]
+
+      if (this.hasRGB) {
+        this.palette = {
+          off: 0,
+          blue: 37,
+          yellow: 62,
+          orange: 61,
+          green: 22,
+          red: 5,
+        }
+      }
+    }
   }
 
   get hasRGB() {
-    return /^Launchpad ?(S|Mini( MK2)?)?$/.test(this.input.name)
+    return (
+      !!this.input &&
+      /^Launchpad (X|Mini MK3|(Pro )?MK[23])$/.test(this.input.name)
+    )
+  }
+
+  get isConnected() {
+    return !!this.midiAccess && AbstractLaunchpad.available(this.midiAccess)
   }
 
   /** @virtual **/
@@ -97,12 +112,13 @@ export class AbstractLaunchpad {
 
   lightPad(position, color) {
     if (this.midiNumbers.has(position)) {
-      this.output &&
+      if (this.isConnected) {
         this.output.send([
           144,
           this.midiNumbers.get(position),
           this.palette[color],
         ])
+      }
       this.element.children[(7 - position.y) * 8 + position.x].classList.toggle(
         'lit',
         color !== 'off'
@@ -112,8 +128,9 @@ export class AbstractLaunchpad {
 
   lightAllPads(color) {
     for (const value of this.midiNumbers.values()) {
-      this.output &&
+      if (this.isConnected) {
         this.output.send([144, value, this.palette[color]])
+      }
     }
     for (const pad of this.element.children) {
       pad.classList.toggle('lit', color !== 0)
