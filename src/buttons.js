@@ -33,7 +33,10 @@ async function setupMIDI() {
     }
   )
 
-  launchpad.onPush = automaton.set.bind(automaton)
+  launchpad.onPush = (position, value) => {
+    automaton.set(position, value > 0 ? 1 : 0)
+    launchpad.lightPad(position, value ? 'yellow' : 'off')
+  }
 
   function refreshPads() {
     for (const pad of automaton.entries()) {
