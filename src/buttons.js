@@ -1,9 +1,7 @@
 import { Automaton } from './automaton.js'
-import { Grid2D } from './grid.js'
 import { AbstractLaunchpad as Launchpad } from './launchpad.js'
-import { Position } from './position.js'
 import { gameOfLifeRules } from './rules.js'
-import { $, $$, range, unzip, zip } from './utils.js'
+import { $, $$ } from './utils.js'
 
 const launchpad = new Launchpad()
 const automaton = new Automaton(
@@ -108,7 +106,7 @@ async function setupMIDI() {
 }
 
 navigator.permissions
-  .query({ name: 'midi' })
+  .query({ name: 'midi', sysex: true })
   .then(permission => {
     if (permission.state === 'granted') setupMIDI()
   })

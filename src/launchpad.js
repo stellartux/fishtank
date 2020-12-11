@@ -1,16 +1,16 @@
-import { range, zip, $, $$ } from './utils.js'
+import { range, $ } from './utils.js'
 import { Grid2D } from './grid.js'
 import { Position } from './position.js'
 
 export class AbstractLaunchpad {
   constructor(options = {}) {
     const midiNumbers = Grid2D.fromData(
-      [...range(11, 81, 10)].map(start => [...range(start, start + 7)])
+      [...range(11, 81, 10)].map((start) => [...range(start, start + 7)])
     )
     this.midiNumbers = midiNumbers
 
     this.positions = {
-      get: function(midiNumber) {
+      get: function (midiNumber) {
         const position = new Position(
           (midiNumber % 10) - 1,
           Math.floor(midiNumber / 10) - 1
@@ -19,13 +19,13 @@ export class AbstractLaunchpad {
           return position
         }
       },
-      keys: function*() {
+      keys: function* () {
         yield* midiNumbers.values()
       },
-      values: function*() {
+      values: function* () {
         yield* midiNumbers.keys()
       },
-      entries: function*() {
+      entries: function* () {
         for (const [key, value] of midiNumbers.entries()) {
           yield [value, key]
         }
@@ -67,21 +67,43 @@ export class AbstractLaunchpad {
     }
   }
 
-  connectMIDI(access) {
-    if (AbstractLaunchpad.available(access)) {
+  /**
+   * @param {MIDIAccess} access
+   * @param {object} options
+   * @param {number} [options.inputNumber]
+   * @param {number} [options.outputNumber]
+   * @param {function} [options.inputCallback]
+   * @param {string} [options.inputId]
+   * @param {string} [options.outputId]
+   **/
+  connectMIDI(access, options = {}) {
+    if (
+      (options.inputId && options.outputId) ||
+      AbstractLaunchpad.available(access)
+    ) {
       this.midiAccess = access
 
-      this.input = Array.from(access.inputs).find(input =>
-        input[1].name.startsWith('Launchpad')
-      )[1]
-
-      if (typeof inputCallback === 'function') {
-        this.input.addEventListener('midimessage', inputCallback)
+      if (options.inputId) {
+        this.input = access.inputs.get()
+      } else {
+        this.input = access.inputs.find((input) =>
+          input[1].name.startsWith('Launchpad')
+        )[1]
       }
 
-      this.output = Array.from(access.outputs).find(output =>
-        output[1].name.startsWith('Launchpad')
-      )[1]
+      if (typeof options.inputCallback === 'function') {
+        this.input.addEventListener('midimessage', options.inputCallback)
+      }
+
+      const outputs = Array.from(access.outputs)
+
+      if (options.outputNumber < outputs.length) {
+        this.output = outputs[options.outputNumber][1]
+      } else {
+        this.output = outputs.find((output) =>
+          output[1].name.startsWith('Launchpad')
+        )[1]
+      }
 
       if (this.hasRGB) {
         this.palette = {
@@ -104,7 +126,7 @@ export class AbstractLaunchpad {
   }
 
   get isConnected() {
-    return !!this.midiAccess && AbstractLaunchpad.available(this.midiAccess)
+    return !!this.midiAccess
   }
 
   /** @virtual **/
@@ -161,7 +183,7 @@ export class AbstractLaunchpad {
    * @returns {boolean} whether access has a Launchpad
    **/
   static available(access) {
-    const hasLaunchpad = device => device[1].name.startsWith('Launchpad')
+    const hasLaunchpad = (device) => device[1].name.startsWith('Launchpad')
     return (
       Array.from(access.inputs).some(hasLaunchpad) &&
       Array.from(access.outputs).some(hasLaunchpad)

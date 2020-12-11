@@ -20,3 +20,6 @@ button {
     background-color: var(--color-mn);
   }
 }
+hidden {
+  display: none;
+}

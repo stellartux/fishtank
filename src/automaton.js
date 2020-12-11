@@ -1,14 +1,14 @@
 import { Grid2D } from './grid.js'
 
-/**
- * @param {Ruleset} rules (position, grid) => newValue
- * @param {object} options
- * @param {number} options.width
- * @param {number} options.height
- * @param {function} [options.init=()=>0] A function returning the initial value based on position
- * @param {boolean} [options.wrap=false]
- **/
 export class Automaton extends Grid2D {
+  /**
+   * @param {import('./rules.js').Ruleset} rules (position, grid) => newValue
+   * @param {number} options.height
+   * @param {number} options.width
+   * @param {function} [options.init = () => 0] A function returning the initial value based on position
+   * @param {boolean} [options.wrap = false]
+   * @param {number} [option.historyLength = 0] How many undo states to retain
+   **/
   constructor(rules, options) {
     super(options)
     this.rules = rules
@@ -18,18 +18,18 @@ export class Automaton extends Grid2D {
       } else {
         const state = []
         this.history = {
-          push: function(grid) {
+          push: function (grid) {
             state.push(grid)
             while (state.length > options.historyLength) {
               state.shift()
             }
           },
-          pop: function() {
+          pop: function () {
             return state.pop()
           },
           get length() {
             return state.length
-          }
+          },
         }
       }
     } else {

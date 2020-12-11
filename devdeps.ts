@@ -1,1 +1,2 @@
-export * from 'https://deno.land/std@v0.42.0/testing/asserts.ts'
+//@ts-ignore
+export * from 'https://deno.land/std@v0.67.0/testing/asserts.ts'

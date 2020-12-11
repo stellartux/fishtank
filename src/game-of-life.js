@@ -1,6 +1,6 @@
 import { Automaton } from './automaton.js'
+import { games, Ruleset, totalRuleRegex } from './rules.js'
 import { $, $$, debounce } from './utils.js'
-import { games, totalRuleRegex, Ruleset } from './rules.js'
 
 customElements.define(
   'game-of-life',
@@ -105,7 +105,8 @@ input[name="rules"]:invalid{border-color:#dd1111;}
         gameList.append(option)
       }
 
-      const rules = $('input[name="rules"]', this.shadow)
+      /** @type {HTMLInputElement} */
+      const rules = document.querySelector('input[name="rules"]', this.shadow)
       rules.addEventListener('input', ev => {
         if (totalRuleRegex.test(rules.value)) {
           rules.setCustomValidity('')

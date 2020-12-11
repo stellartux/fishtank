@@ -1,7 +1,7 @@
 import { Automaton } from './automaton.js'
 import { $, $$, wrap } from './utils.js'
 
-const canvas = $('canvas'),
+const canvas = document.querySelector('canvas'),
   ctx = canvas.getContext('2d'),
   pixel = 16 * devicePixelRatio,
   controls = $('#controls')

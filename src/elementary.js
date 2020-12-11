@@ -4,12 +4,13 @@ import { isByte, withinRange } from './utils.js'
  * When given a Wolfram number, an initial state and a word length for the state,
  * returns an iterable which generates the successive values of the Elementary
  * Cellular Automaton described by that Wolfram number.
- * @param {number} wolframNumber
- * @param {number} [initialState=1]
- * @param {number} [length=16] the
- * @returns {Iterable}
  **/
 export class ElementaryAutomaton {
+  /**
+   * @param {number} wolframNumber
+   * @param {number} [initialState = 1] default 1
+   * @param {number} [length = 16] default 16
+   */
   constructor(wolframNumber, initialState = 1, length = 16) {
     if (
       !(

@@ -1,7 +1,6 @@
-import { assert, assertEquals } from '../devdeps.ts'
+import { assertEquals } from '../devdeps.ts'
 import { Ruleset, gameOfLifeRules, games } from '../src/rules.js'
 import { Automaton } from '../src/automaton.js'
-import { Position } from '../src/position.js'
 import { HEXAGONAL } from '../src/neighbourhood.js'
 
 const expected = new Automaton(gameOfLifeRules, { width: 4, height: 4 })

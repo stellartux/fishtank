@@ -10,20 +10,37 @@ export class Position {
         this.x = args[0][0]
         this.y = args[0][1]
       }
-    } else if (args.length === 2 && Position.isPositionArray(args)) {
+    } else if (Position.isPositionArray(args)) {
       this.x = args[0]
       this.y = args[1]
     } else throw Error('Bad input')
   }
 
-  static isPosition(p) {
-    return Number.isFinite(p.x) && Number.isFinite(p.y)
+  /**
+   * @param {Position} position
+   */
+  static isPosition(position) {
+    return Number.isFinite(position.x) && Number.isFinite(position.y)
   }
 
-  static isPositionArray(p) {
-    return Array.isArray(p) && Number.isFinite(p[0]) && Number.isFinite(p[1])
+  /**
+   * @param {number[]} position
+   */
+  static isPositionArray(position) {
+    return (
+      Array.isArray(position) &&
+      position.length === 2 &&
+      Number.isFinite(position[0]) &&
+      Number.isFinite(position[1])
+    )
   }
 
+  /**
+   * Generates a range of Positions, from left to right, top to bottom.
+   * @param {Position} start the top-left Position
+   * @param {Position} end the bottom-right Position
+   * @yields {Position}
+   */
   static *range(start, end) {
     if (!Position.isPosition(start)) throw Error(`${start} is not a position`)
     if (!Position.isPosition(end)) throw Error(`${end} is not a position`)
@@ -35,6 +52,11 @@ export class Position {
     }
   }
 
+  /**
+   * @param {Position} position
+   * @param {Position} topLeft
+   * @param {Position} bottomRight
+   */
   static wrap(position, topLeft, bottomRight) {
     return new Position(
       wrap(position.x, topLeft.x, bottomRight.x),

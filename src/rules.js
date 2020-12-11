@@ -1,11 +1,12 @@
-import {
-  Neighbourhood,
-  MOORE,
-  VON_NEUMANN,
-  HEXAGONAL,
-} from './neighbourhood.js'
+import { Grid2D } from './grid.js'
+import { HEXAGONAL, MOORE, VON_NEUMANN } from './neighbourhood.js'
 import { sum, unique } from './utils.js'
+/** @typedef {import('./position.js').Position} Position */
 
+/**
+ * @param {Position} position
+ * @param {Grid2D} grid
+ */
 export function gameOfLifeRules(position, grid) {
   const value = grid.get(position)
   let total = 0
@@ -55,19 +56,23 @@ export function Ruleset(str) {
   }
   if (totalRuleRegex.test(str)) {
     const match = str.match(totalRuleRegex)
-    const birth = match[1]
-      .split('')
-      .filter(unique)
-      .map(Number)
+    const birth = match[1].split('').filter(unique).map(Number)
     const survives = match[2].split('').map(Number)
     const neighbourhood = neighbourhoods[match[3]]
-    return function(position, grid) {
+
+    /**
+     * @param {Position} position
+     * @param {Grid2D} grid
+     */
+    function ruleset(position, grid) {
       return Number(
         (grid.get(position) ? survives : birth).includes(
           Array.from(grid.neighbourValues(position, neighbourhood)).reduce(sum)
         )
       )
     }
+    return ruleset
+
   } else {
     throw Error(`Ruleset: Could not parse "${str}"`)
   }
