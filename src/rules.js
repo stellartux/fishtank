@@ -72,7 +72,6 @@ export function Ruleset(str) {
       )
     }
     return ruleset
-
   } else {
     throw Error(`Ruleset: Could not parse "${str}"`)
   }

@@ -7,7 +7,7 @@ export class Grid2D {
    * @param {object} options
    * @param {number} options.height how many rows the grid should have
    * @param {number} options.width how many columns the grid should have
-   * @param {string | number[][]?} [options.data] an optional initial state for the grid to be in
+   * @param {string | any[][]?} [options.data] an optional initial state for the grid to be in
    * @param {number?} [options.init = 0] if data is not declared, the initial value of all cells, defaults to 0
    * @param {boolean?} [options.wrap = false] whether neighbourhoods should wrap at the edges, defaults to false
    */
@@ -32,6 +32,7 @@ export class Grid2D {
   get size() {
     return this.width * this.height
   }
+
   fill(value = 0) {
     this.data = Array.from({ length: this.height }, () =>
       Array.from(
@@ -40,15 +41,18 @@ export class Grid2D {
       )
     )
   }
+
   clear() {
     this.fill(0)
   }
+
   /**
    * @param {Position} position
    */
   delete(position) {
     this.set(position, 0)
   }
+
   /**
    * @param {Position} position
    */
@@ -122,8 +126,8 @@ export class Grid2D {
   }
 
   /**
-   * @param {Position} position,
-   * @param {}
+   * @param {Position} position
+   * @param {Neighbourhood} neighbourhood a list of offsets to find the neighbours, default to a Moore neighbourhood
    */
   *neighbours(position, neighbourhood = MOORE) {
     yield* neighbourhood
@@ -137,6 +141,7 @@ export class Grid2D {
       })
       .filter(this.has.bind(this))
   }
+
   /**
    * @param {any} position
    */
@@ -191,6 +196,7 @@ export class Grid2D {
   [Symbol.toStringTag]() {
     return 'Grid2D'
   }
+
   copy() {
     return new Grid2D(this)
   }
@@ -239,6 +245,7 @@ export class Grid2D {
   reduce(fn, init) {
     return Array.from(this.values()).reduce(fn, init)
   }
+
   /**
    * @param {(arg0: any) => boolean} predicate
    */
@@ -250,6 +257,7 @@ export class Grid2D {
     }
     return false
   }
+
   /**
    * @param {(arg0: any) => boolean} predicate
    */
