@@ -106,7 +106,7 @@ input[name="rules"]:invalid{border-color:#dd1111;}
       }
 
       /** @type {HTMLInputElement} */
-      const rules = document.querySelector('input[name="rules"]', this.shadow)
+      const rules = this.shadow.querySelector('input[name="rules"]')
       rules.addEventListener('input', ev => {
         if (totalRuleRegex.test(rules.value)) {
           rules.setCustomValidity('')

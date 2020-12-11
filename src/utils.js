@@ -1,2 +1,2 @@
 //@ts-nocheck
-export * from 'https://raw.githubusercontent.com/stellartux/utilele/master/utilele.js'
+export * from 'https://stellartux.github.io/utilele/utilele.js'
