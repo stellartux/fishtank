@@ -47,6 +47,17 @@ export class Automaton extends Grid2D {
     return this
   }
 
+  /**
+   * ! May enter an infinite loop if the automaton does not terminate
+   */
+  terminate() {
+    if (this.history.length > 0) {
+      do {
+        this.next()
+      } while (!this.equals(this.history.peek()))
+    }
+  }
+
   undo(steps = 1) {
     if (this.history.length >= steps) {
       while (steps-- > 1) {
