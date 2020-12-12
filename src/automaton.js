@@ -27,6 +27,9 @@ export class Automaton extends Grid2D {
           pop: function () {
             return state.pop()
           },
+          peek: function() {
+            return state[state.length - 1]
+          },
           get length() {
             return state.length
           },
@@ -41,6 +44,7 @@ export class Automaton extends Grid2D {
     const previous = this.copy()
     previous.forEach((_, pos) => this.set(pos, rules(pos, previous)))
     this.history.push(previous)
+    return this
   }
 
   undo(steps = 1) {
@@ -48,8 +52,8 @@ export class Automaton extends Grid2D {
       while (steps-- > 1) {
         this.history.pop()
       }
-      const state = this.history.pop()
-      this.copyFrom(state)
+      this.copyFrom(this.history.pop())
     }
+    return this
   }
 }

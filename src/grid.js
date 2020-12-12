@@ -193,7 +193,7 @@ export class Grid2D {
     }
   }
 
-  [Symbol.toStringTag]() {
+  get [Symbol.toStringTag]() {
     return 'Grid2D'
   }
 
@@ -259,14 +259,27 @@ export class Grid2D {
   }
 
   /**
-   * @param {(arg0: any) => boolean} predicate
+   * @param {(value: any, position: Position) => boolean} predicate
    */
   every(predicate) {
-    for (const value of this.values()) {
-      if (!predicate(value)) {
+    for (const [position, value] of this.entries()) {
+      if (!predicate(value, position)) {
         return false
       }
     }
     return true
+  }
+
+  /**
+   * Compare the contents of a pair of Grid2D objects
+   * @param {Grid2D} other the grid to compare this Grid2D with
+   * @returns {boolean} true if every value in this grid is equal to the value at that position on the other grid
+   */
+  equals(other) {
+    return (
+      this.length === other.length &&
+      this.width === other.width &&
+      this.every((val, pos) => val === other.get(pos))
+    )
   }
 }
