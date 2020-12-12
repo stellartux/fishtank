@@ -40,10 +40,12 @@ export class Grid2D {
         typeof value === 'function' ? value : () => value
       )
     )
+    return this
   }
 
   clear() {
     this.fill(0)
+    return this
   }
 
   /**

@@ -55,6 +55,7 @@ export class Automaton extends Grid2D {
     do {
       this.next()
     } while (this.history.length && !this.equals(this.history.peek()))
+    return this
   }
 
   undo(steps = 1) {

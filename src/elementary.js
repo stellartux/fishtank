@@ -39,7 +39,7 @@ export class ElementaryAutomaton {
     return this.patterns[4 * left + 2 * centre + right]
   }
 
-  [Symbol.iterator]() {
+  get [Symbol.iterator]() {
     return this
   }
 
