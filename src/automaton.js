@@ -27,7 +27,7 @@ export class Automaton extends Grid2D {
           pop: function () {
             return state.pop()
           },
-          peek: function() {
+          peek: function () {
             return state[state.length - 1]
           },
           get length() {
@@ -48,14 +48,13 @@ export class Automaton extends Grid2D {
   }
 
   /**
-   * ! May enter an infinite loop if the automaton does not terminate
+   * ! Will enter an infinite loop if the automaton does not terminate
+   * Only executes once if the automaton doesn't keep a history
    */
   terminate() {
-    if (this.history.length) {
-      do {
-        this.next()
-      } while (!this.equals(this.history.peek()))
-    }
+    do {
+      this.next()
+    } while (this.history.length && !this.equals(this.history.peek()))
   }
 
   undo(steps = 1) {
